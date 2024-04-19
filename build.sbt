@@ -25,8 +25,11 @@ lazy val root = (project in file("."))
       Libraries.cats,
       Libraries.catsEffect,
       Libraries.catsRetry,
+      Libraries.fs2Core,
+      Libraries.fs2IO,
       Libraries.log4cats,
-      Libraries.logback % Runtime
+      Libraries.logback % Runtime,
+      Libraries.pureConfig
     )
 
   )
