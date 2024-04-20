@@ -11,14 +11,12 @@ ThisBuild / evictionErrorLevel := Level.Warn
 
 resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 
-
-
 lazy val root = (project in file("."))
   .enablePlugins(DockerPlugin, JavaAppPackaging)
   .enablePlugins(AshScriptPlugin) // generate binary using Ash shell for Docker compatibility
   .settings(
     name := "fetch-api",
-    Docker/ packageName := "fetch-api",
+    Docker / packageName := "fetch-api",
     dockerUpdateLatest := true,
     dockerExposedPorts := Seq(8080),
     dockerBaseImage := "openjdk:11-jre-slim-buster",
@@ -40,8 +38,8 @@ lazy val root = (project in file("."))
       Libraries.pureConfig,
       Libraries.playJson
     )
-
   )
 
-addCommandAlias("fmt", "scalafmt")
+addCommandAlias("fmt", ";tpolecatCiMode;scalafmtSbt;scalafmtAll")
+addCommandAlias("fmtCheck", ";tpolecatCiMode;scalafmtCheckAll")
 addCommandAlias("c", "compile")
