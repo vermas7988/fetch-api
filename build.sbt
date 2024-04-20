@@ -14,9 +14,15 @@ resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 
 
 lazy val root = (project in file("."))
+  .enablePlugins(DockerPlugin, JavaAppPackaging)
+  .enablePlugins(AshScriptPlugin) // generate binary using Ash shell for Docker compatibility
   .settings(
     name := "fetch-api",
     Docker/ packageName := "fetch-api",
+    dockerUpdateLatest := true,
+    dockerExposedPorts := Seq(8080),
+    dockerBaseImage := "openjdk:11-jre-slim-buster",
+    makeBatScripts := Seq(), // don't generate windows binary on publish
     scalacOptions ++= List("-Ymacro-annotations", "-Yrangepos", "-Wconf:cat=unused:info"),
     scalafmtOnCompile := true,
     resolvers ++= Resolver.sonatypeOssRepos("snapshots"),
