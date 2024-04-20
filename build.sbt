@@ -34,3 +34,6 @@ lazy val root = (project in file("."))
     )
 
   )
+
+addCommandAlias("fmt", "scalafmt")
+addCommandAlias("c", "compile")
