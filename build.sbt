@@ -16,6 +16,7 @@ resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 lazy val root = (project in file("."))
   .settings(
     name := "fetch-api",
+    Docker/ packageName := "fetch-api",
     scalacOptions ++= List("-Ymacro-annotations", "-Yrangepos", "-Wconf:cat=unused:info"),
     scalafmtOnCompile := true,
     resolvers ++= Resolver.sonatypeOssRepos("snapshots"),
