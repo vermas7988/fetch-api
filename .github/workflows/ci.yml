@@ -14,7 +14,7 @@ jobs:
       - uses: olafurpg/setup-scala@v10
         with:
           java-version: graalvm@21.0.0
-# todo enable after adding kafka and tests
+# todo enable after adding kafka and tests and use nix shell
 #      - name: "Starting up Docker 🐳"
 #        run: docker-compose up -d
 
