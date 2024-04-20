@@ -1,5 +1,7 @@
 package dev.sachin.domain
 
+import play.api.libs.json.{ Json, OFormat }
+
 import java.time.Instant
 
 sealed trait StockData
@@ -22,4 +24,8 @@ object StockData {
       value: BigDecimal, // total amount of trade in a day
       noOfTrades: Long
   ) extends StockData
+
+  object NSEData {
+    val format: OFormat[NSEData] = Json.format
+  }
 }

@@ -1,22 +1,36 @@
 package dev.sachin
 
-import cats.effect.{ ExitCode, IO, IOApp }
-import dev.sachin.service.{ ColumnParser, FileReader }
+import cats.effect.{ ExitCode, IO, Resource, ResourceApp }
+import dev.sachin.config.ApplicationConfig
+import dev.sachin.kafka.Fs2ProducerSettings
+import dev.sachin.service.{ ColumnParser, FileReader, PublishData }
+import fs2.kafka.KafkaProducer
 import org.typelevel.log4cats.Logger
 import org.typelevel.log4cats.slf4j.Slf4jLogger
 
 import java.nio.file.{ Path => JPath }
 
-object Main extends IOApp {
+object Main extends ResourceApp {
 
   implicit val logger: Logger[IO] = Slf4jLogger.getLogger[IO]
 
-  override def run(args: List[String]): IO[ExitCode] = {
+  override def run(args: List[String]): Resource[IO, ExitCode] = {
     for {
-      _ <- Logger[IO].info("Here starts the program")
-      nseColumnParser = ColumnParser.nseParser
-      _ <- FileReader.impl.readFile(JPath.of("./src/main/resources/HDFC_A.tsv"))(nseColumnParser)
+      _               <- Resource.eval(Logger[IO].info("Acquiring resources...."))
+      applicationConf <- ApplicationConfig.resource
+      kafkaProducer   <- KafkaProducer.resource(Fs2ProducerSettings.apply(applicationConf))
+      _               <- Resource.eval(program(kafkaProducer))
     } yield ExitCode.Success
+  }
+
+  private def program(kafkaProducer: KafkaProducer[IO, String, Array[Byte]]): IO[Unit] = {
+    for {
+      _ <- Logger[IO].info("Loading Program....")
+      nseColumnParser = ColumnParser.nseParser
+      dataStream      = FileReader.impl.readFile(JPath.of("./src/main/resources/HDFC_A.tsv"))(nseColumnParser)
+      _               = PublishData.impl(kafkaProducer, dataStream)
+      _ <- dataStream.compile.drain
+    } yield ()
   }
 
 }

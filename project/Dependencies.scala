@@ -9,6 +9,7 @@ object Dependencies {
     val catsEffect    = "3.5.4"
     val catsRetry     = "3.1.3"
     val fs2           = "3.10.2"
+    val fs2Kafka      = "3.5.0"
 
     val http4s        = "0.23.26"
 
@@ -31,6 +32,7 @@ object Dependencies {
     val catsRetry  = "com.github.cb372" %% "cats-retry"  % Versions.catsRetry
     val fs2Core    = fs2("core")
     val fs2IO      = fs2("io")
+    val fs2Kafka   = "com.github.fd4s" %% "fs2-kafka" % Versions.fs2Kafka
 
     val log4cats = "org.typelevel" %% "log4cats-slf4j" % Versions.log4cats
     val logback = "ch.qos.logback" % "logback-classic" % Versions.logback
