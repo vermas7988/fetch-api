@@ -8,5 +8,6 @@ object Fs2ProducerSettings {
   def apply(applicationConf: ApplicationConfig): ProducerSettings[IO, String, Array[Byte]] =
     ProducerSettings[IO, String, Array[Byte]]
       .withBootstrapServers(applicationConf.kafka.bootstrapServer)
+      .withRetries(Int.MaxValue)
 
 }

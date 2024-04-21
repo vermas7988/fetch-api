@@ -28,7 +28,7 @@ object Main extends ResourceApp {
       _ <- Logger[IO].info("Loading Program....")
       nseColumnParser = ColumnParser.nseParser
       dataStream      = FileReader.impl.readFile(JPath.of("./src/main/resources/HDFC_A.tsv"))(nseColumnParser)
-      _               = PublishData.impl(kafkaProducer, dataStream)
+      _ <- PublishData.impl(kafkaProducer, dataStream).run()
       _ <- dataStream.compile.drain
     } yield ()
   }

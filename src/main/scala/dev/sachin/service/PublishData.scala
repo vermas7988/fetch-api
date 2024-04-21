@@ -25,7 +25,7 @@ object PublishData {
       override def run(): IO[Unit] =
         dataStream
           .map { nseDataRow =>
-            val json = Json.toJson[NSEData](nseDataRow)(NSEData.format)
+            val json = Json.toJson(nseDataRow)
             Json.stringify(json)
           }
           .map { jsonStr =>

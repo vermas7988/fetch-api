@@ -26,6 +26,6 @@ object StockData {
   ) extends StockData
 
   object NSEData {
-    val format: OFormat[NSEData] = Json.format
+    implicit val format: OFormat[NSEData] = Json.format
   }
 }

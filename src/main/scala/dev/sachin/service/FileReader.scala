@@ -24,6 +24,5 @@ object FileReader {
           .map(_.replace(",", ""))
           .map(_.split("\t"))
           .map(columnParser.parse)
-          .flatTap(x => Stream.eval(IO(println(x)))) // todo remove line once working
     }
 }
