@@ -1,6 +1,7 @@
 package dev.sachin.service
 
 import cats.effect.IO
+import dev.sachin.config.KafkaConnections
 import dev.sachin.domain.StockData.NSEData
 import fs2.Stream
 import fs2.kafka.{ KafkaProducer, ProducerRecord, ProducerRecords }
@@ -10,7 +11,7 @@ import java.nio.charset.StandardCharsets
 
 sealed trait PublishData[T] {
 
-  val producerKafkaTopic: String = "abcd" // todo configure
+  val producerKafkaTopic: String = KafkaConnections.tickerData // todo configure
 
   def run(): IO[Unit]
 }
