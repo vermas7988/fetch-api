@@ -30,6 +30,8 @@ lazy val root = (project in file("."))
       Libraries.cats,
       Libraries.catsEffect,
       Libraries.catsRetry,
+      Libraries.doobieCore,
+      Libraries.doobieDB,
       Libraries.fs2Core,
       Libraries.fs2IO,
       Libraries.fs2Kafka,
