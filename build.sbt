@@ -41,6 +41,20 @@ lazy val root = (project in file("."))
       Libraries.playJson
     )
   )
+  .settings(flywaySettings)
+  .enablePlugins(FlywayPlugin)
+
+lazy val flywaySettings = Seq(
+  flywayUrl := "jdbc:postgresql://localhost:5432/fetch_api;shutdown=true",
+  flywayUser := "fetch_api_user",
+  flywayPassword := "fetch_api_user",
+  flywayLocations := Seq("db/migration"),
+  flywayDriver := "org.postgresql.Driver"
+//  Test/ flywayUrl  := "jdbc:hsqldb:file:target/flyway_sample;shutdown=true",
+//  Test/ flywayUser := "SA",
+//  Test/ flywayLocations := Seq("filesystem:src/main/resources/db/migration"),
+//  Test/ flywayPassword := "",
+)
 
 addCommandAlias("fmt", ";tpolecatCiMode;scalafmtSbt;scalafmtAll")
 addCommandAlias("fmtCheck", ";tpolecatCiMode;scalafmtCheckAll")

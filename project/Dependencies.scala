@@ -11,8 +11,6 @@ object Dependencies {
     val fs2        = "3.10.2"
     val fs2Kafka   = "3.5.0"
 
-    val flyway = "7.2.0"
-
     val http4s = "0.23.26"
 
     val log4cats   = "2.6.0"
@@ -26,9 +24,9 @@ object Dependencies {
 
   object Libraries {
 
-    private def http4s(artifact: String): ModuleID = "org.http4s" %% s"http4s-$artifact" % Versions.http4s
+    private def http4s(artifact: String): ModuleID = "org.http4s"   %% s"http4s-$artifact" % Versions.http4s
     private def doobie(artifact: String): ModuleID = "org.tpolecat" %% s"doobie-$artifact" % Versions.doobie
-    private def fs2(artifact: String): ModuleID    = "co.fs2"     %% s"fs2-$artifact"    % Versions.fs2
+    private def fs2(artifact: String): ModuleID    = "co.fs2"       %% s"fs2-$artifact"    % Versions.fs2
 
     val cats       = "org.typelevel" %% "cats-core" % Versions.cats
     val catsEffect = "org.typelevel" %% "cats-effect" % Versions.catsEffect
@@ -39,8 +37,6 @@ object Dependencies {
 
     val doobieCore = doobie("core")
     val doobieDB   = doobie("postgres")
-    val flyway     = "org.flywaydb" %  "flyway-core" % Versions.flyway
-
 
     val log4cats   = "org.typelevel"         %% "log4cats-slf4j" % Versions.log4cats
     val logback    = "ch.qos.logback"        % "logback-classic" % Versions.logback
