@@ -1,17 +1,19 @@
 package dev.sachin.db
 
 import cats.effect.IO
+import dev.sachin.config.ApplicationConfig.DbConfig
 import doobie.util.transactor.Transactor
 
 object TransactorModule {
 
-  def dataSource() = {
-    Transactor.fromDriverManager[IO](
-      driver = "org.postgresql.Driver",
-      url = "jdbc:postgresql:world",
-      user = "postgres",
-      password = "password",
-      logHandler = None)
-  }
+  type DBTransactor = Transactor.Aux[IO, Unit]
+
+  def dataSource(config: DbConfig): Transactor.Aux[IO, Unit] = Transactor.fromDriverManager[IO](
+    driver = config.driver,
+    url = config.url,
+    user = config.user,
+    password = config.pass,
+    logHandler = None
+  )
 
 }

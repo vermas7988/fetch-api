@@ -27,7 +27,7 @@ trait ProcessData {
 
 object ProcessData {
 
-  def impl(applicationConfig: ApplicationConfig) = new ProcessData {
+  def impl(applicationConfig: ApplicationConfig): ProcessData = new ProcessData {
 
     implicit val logger: Logger[IO] = Slf4jLogger.getLogger[IO]
 
@@ -58,14 +58,14 @@ object ProcessData {
       ???
     }
 
-  }
+    def logIncomingRecords(record: CommittableConsumerRecord[IO, String, Array[Byte]]) = {
+      Logger[IO].info(s"Process stream received record with key: ${record.record.key}")
+    }
 
-  def logIncomingRecords(record: CommittableConsumerRecord[IO, String, Array[Byte]]) = {
-    Logger[IO].info(s"Process stream received record with key: ${record.record.key}")
-  }
+    def deserialize(record: Array[Byte]) = {
+      Json.parse(record).as[NSEData] // todo make generic for all markets
+    }
 
-  def deserialize(record: Array[Byte]) = {
-    Json.parse(record).as[NSEData] // todo make generic for all markets
   }
 
 }

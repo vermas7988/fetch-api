@@ -11,6 +11,8 @@ object Dependencies {
     val fs2        = "3.10.2"
     val fs2Kafka   = "3.5.0"
 
+    val flyway = "7.2.0"
+
     val http4s = "0.23.26"
 
     val log4cats   = "2.6.0"
@@ -37,6 +39,8 @@ object Dependencies {
 
     val doobieCore = doobie("core")
     val doobieDB   = doobie("postgres")
+    val flyway     = "org.flywaydb" %  "flyway-core" % Versions.flyway
+
 
     val log4cats   = "org.typelevel"         %% "log4cats-slf4j" % Versions.log4cats
     val logback    = "ch.qos.logback"        % "logback-classic" % Versions.logback

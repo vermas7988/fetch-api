@@ -2,6 +2,8 @@ package dev.sachin
 
 import cats.effect.{ ExitCode, IO, Resource, ResourceApp }
 import dev.sachin.config.ApplicationConfig
+import dev.sachin.db.TransactorModule
+import dev.sachin.db.TransactorModule.DBTransactor
 import dev.sachin.kafka.Fs2ProducerSettings
 import dev.sachin.service.{ ColumnParser, FileReader, PublishData }
 import fs2.kafka.KafkaProducer
@@ -19,11 +21,12 @@ object Main extends ResourceApp {
       _               <- Resource.eval(Logger[IO].info("Acquiring resources...."))
       applicationConf <- ApplicationConfig.resource
       kafkaProducer   <- KafkaProducer.resource(Fs2ProducerSettings.apply(applicationConf))
-      _               <- Resource.eval(program(kafkaProducer))
+      transactor = TransactorModule.dataSource(applicationConf.database)
+      _ <- Resource.eval(program(kafkaProducer, transactor))
     } yield ExitCode.Success
   }
 
-  private def program(kafkaProducer: KafkaProducer[IO, String, Array[Byte]]): IO[Unit] = {
+  private def program(kafkaProducer: KafkaProducer[IO, String, Array[Byte]], transactor: DBTransactor): IO[Unit] = {
     for {
       _ <- Logger[IO].info("Loading Program....")
       nseColumnParser = ColumnParser.nseParser
