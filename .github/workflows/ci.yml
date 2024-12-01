@@ -1,0 +1,29 @@
+name: Scala
+
+on:
+  pull_request: {}
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v2.3.2
+      - uses: olafurpg/setup-scala@v10
+        with:
+          java-version: openjdk@1.14
+      - name: Format Check
+        run: sbt 'fmtCheck'
+      - name: Compile
+        run: sbt 'compile'
+# todo enable after adding kafka and tests and use nix shell
+#      - name: "Starting up Docker 🐳"
+#        run: docker-compose up -d
+
+#      - name: Tests
+#        run: sbt 'test;it:test'
+
+#      - name: "Shutting down Docker 🐳"
+#        run: docker-compose down

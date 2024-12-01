@@ -1,0 +1,1 @@
+# This project aims to fetch stock market data for configured tickers on a daily basis. WIP
