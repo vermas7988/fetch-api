@@ -1,6 +1,6 @@
 package dev.sachin.domain
 
-import play.api.libs.json.{ Json, OFormat }
+import play.api.libs.json.{Json, OFormat}
 
 import java.time.Instant
 

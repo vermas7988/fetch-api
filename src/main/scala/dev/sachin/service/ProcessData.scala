@@ -2,7 +2,7 @@ package dev.sachin.service
 
 import cats.effect.IO
 import cats.effect.kernel.Resource
-import dev.sachin.config.{ ApplicationConfig, KafkaConnections }
+import dev.sachin.config.{ApplicationConfig, KafkaConnections}
 import dev.sachin.domain.StockData
 import dev.sachin.domain.StockData.NSEData
 import dev.sachin.kafka.Fs2KafkaConsumerSettings

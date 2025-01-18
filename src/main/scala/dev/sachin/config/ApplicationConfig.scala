@@ -1,11 +1,11 @@
 package dev.sachin.config
 
-import ApplicationConfig._
-import cats.effect.{ IO, Resource }
-import pureconfig._
-import pureconfig.generic.auto._
+import cats.effect.{IO, Resource}
+import dev.sachin.config.ApplicationConfig.*
+import pureconfig.*
+import pureconfig.ConfigReader.Result
 
-final case class ApplicationConfig private (kafka: KafkaConfig, database: DbConfig)
+final case class ApplicationConfig private (kafka: KafkaConfig, database: DbConfig) derives ConfigReader
 
 object ApplicationConfig {
   final case class KafkaConfig private (bootstrapServer: String)
@@ -16,7 +16,7 @@ object ApplicationConfig {
       url: String,
       user: String,
       pass: String
-  )
+  ) derives ConfigReader
 
   def resource: Resource[IO, ApplicationConfig] =
     Resource.eval(IO.blocking(ConfigSource.default.at("app").loadOrThrow[ApplicationConfig]))

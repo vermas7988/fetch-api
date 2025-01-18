@@ -4,7 +4,7 @@ import cats.effect.IO
 import dev.sachin.config.KafkaConnections
 import dev.sachin.domain.StockData.NSEData
 import fs2.Stream
-import fs2.kafka.{ KafkaProducer, ProducerRecord, ProducerRecords }
+import fs2.kafka.{KafkaProducer, ProducerRecord, ProducerRecords}
 import play.api.libs.json.Json
 
 import java.nio.charset.StandardCharsets
@@ -30,7 +30,11 @@ object PublishData {
             Json.stringify(json)
           }
           .map { jsonStr =>
-            val producerRecord = ProducerRecord(producerKafkaTopic, "hdfc", jsonStr.getBytes(StandardCharsets.UTF_8)) // todo use proper key
+            val producerRecord = ProducerRecord(
+              producerKafkaTopic,
+              "hdfc",
+              jsonStr.getBytes(StandardCharsets.UTF_8)
+            ) // todo use proper key
             ProducerRecords.one(producerRecord)
           }
           .evalMap(kafkaProducer.produce)
