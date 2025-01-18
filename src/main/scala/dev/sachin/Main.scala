@@ -26,12 +26,12 @@ object Main extends ResourceApp {
       _ <- Logger[IO].info("Loading Program....")
       _ <- Logger[IO].info("Loading Program....")
       resourceStream = getClass.getResourceAsStream("/data/nse/stocks/HDFC_temp.csv")
-      path <- IO {
+      _ <- IO {
         val tempFile = Files.createTempFile("HDFC_temp", ".csv")
         Files.copy(resourceStream, tempFile, java.nio.file.StandardCopyOption.REPLACE_EXISTING)
         tempFile
       }
-      _ <- new StockProcessor().computeDailyLogReturn(path)
+      _ <- new StockProcessor().printStockAndBankNiftyLogReturns()
 //      _ <- Logger[IO].info(s"Lines: $lines")
     } yield ()
   }

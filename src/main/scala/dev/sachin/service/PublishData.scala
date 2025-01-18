@@ -2,7 +2,7 @@ package dev.sachin.service
 
 import cats.effect.IO
 import dev.sachin.config.KafkaConnections
-import dev.sachin.domain.StockData.NSEData
+import dev.sachin.domain.TickerData.StockData
 import fs2.Stream
 import fs2.kafka.{KafkaProducer, ProducerRecord, ProducerRecords}
 import play.api.libs.json.Json
@@ -20,9 +20,9 @@ object PublishData {
 
   def impl(
       kafkaProducer: KafkaProducer[IO, String, Array[Byte]],
-      dataStream: Stream[IO, NSEData]
-  ): PublishData[NSEData] =
-    new PublishData[NSEData] {
+      dataStream: Stream[IO, StockData]
+  ): PublishData[StockData] =
+    new PublishData[StockData] {
       override def run(): IO[Unit] =
         dataStream
           .map { nseDataRow =>

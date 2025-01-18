@@ -3,8 +3,8 @@ package dev.sachin.service
 import cats.effect.IO
 import cats.effect.kernel.Resource
 import dev.sachin.config.{ApplicationConfig, KafkaConnections}
-import dev.sachin.domain.StockData
-import dev.sachin.domain.StockData.NSEData
+import dev.sachin.domain.TickerData
+import dev.sachin.domain.TickerData.StockData
 import dev.sachin.kafka.Fs2KafkaConsumerSettings
 import fs2.Chunk
 import fs2.kafka.{
@@ -63,7 +63,7 @@ object ProcessData {
     }
 
     def deserialize(record: Array[Byte]) = {
-      Json.parse(record).as[NSEData] // todo make generic for all markets
+      Json.parse(record).as[StockData] // todo make generic for all markets
     }
 
   }
