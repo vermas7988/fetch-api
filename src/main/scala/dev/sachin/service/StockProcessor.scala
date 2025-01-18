@@ -10,6 +10,34 @@ import java.text.SimpleDateFormat
 
 class StockProcessor() {
 
+  def rankVWAPwithHighestVolume(filepath: JPath): IO[Unit] = {
+    for {
+      lines <- readFileAndParseColumns(filepath)
+      _ <- IO {
+        val sorted = lines.sortBy(_.volume).reverse
+
+        sorted.take(5).foreach(println)
+      }
+    } yield ()
+  }
+
+  def computeDailyLogReturn(filepath: JPath): IO[Unit] = {
+    for {
+      lines <- readFileAndParseColumns(filepath)
+      _ <- IO {
+        val sorted = lines.sortBy(_.date.toEpochMilli)
+
+        sorted.sliding(2).foreach {
+          case List(prev, curr) =>
+            val logReturn = Math.log(curr.close.toDouble / prev.close.toDouble)
+            println(s"${curr.date} : $logReturn")
+
+          case _ => ()
+        }
+      }
+    } yield ()
+  }
+
   def readFileAndParseColumns(filepath: JPath): IO[List[NSEData]] = {
     readFile(filepath)
       .drop(1)

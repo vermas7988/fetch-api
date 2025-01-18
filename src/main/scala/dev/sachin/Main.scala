@@ -31,8 +31,8 @@ object Main extends ResourceApp {
         Files.copy(resourceStream, tempFile, java.nio.file.StandardCopyOption.REPLACE_EXISTING)
         tempFile
       }
-      lines <- new StockProcessor().readFileAndParseColumns(path)
-      _ <- Logger[IO].info(s"Lines: $lines")
+      _ <- new StockProcessor().computeDailyLogReturn(path)
+//      _ <- Logger[IO].info(s"Lines: $lines")
     } yield ()
   }
 
