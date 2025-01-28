@@ -19,6 +19,7 @@ lazy val root = (project in file("."))
     dockerBaseImage := "openjdk:11-jre-slim-buster",
     makeBatScripts := Seq(),
     scalacOptions := scalacOptions.value.filterNot(_ == "-Ykind-projector") ++ List(
+      "-language:experimental.namedTuples",
       "-source:future",
       "-Xkind-projector"
     ),

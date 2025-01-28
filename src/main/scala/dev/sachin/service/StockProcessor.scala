@@ -13,22 +13,61 @@ import java.text.SimpleDateFormat
 class StockProcessor() {
   // BANKNIFTY-19-11-2024-to-19-01-2025.csv
 
-//  def rankVWAPwithHighestVolume(filepath: JPath): IO[Unit] = {
-//    for {
-//      lines <- readFileAndParseColumns(filepath)
-//      _ <- IO {
-//        val sorted = lines.sortBy(_.volume).reverse
-//
-//        sorted.take(5).foreach(println)
-//      }
-//    } yield ()
-//  }
+  
+  def calculate55DaysMovingAverage(filepath: JPath): IO[Unit] = {
+    for {
+      lines <- readFileAndParseColumns(filepath)
+      _ <- IO {
+        val sorted = lines.sortBy(_.date.toEpochMilli)
+
+        sorted.sliding(55).foreach { window =>
+          val movingAverage = window.map(_.close.toDouble).sum / 55
+          println(s"${window.last.date} : $movingAverage")
+        }
+      }
+    } yield ()
+  }
+
+  def calculateVolumeToPriceChangeRatioForStock(filepath: JPath): IO[Unit] = {
+    for {
+      lines <- readFileAndParseColumns(filepath).map(_.asInstanceOf[List[StockData]])
+      _ <- IO {
+        val sorted = lines.sortBy(_.date.toEpochMilli)
+
+        sorted.sliding(2).foreach {
+          case List(prev, curr) =>
+            val volumeToPriceChangeRatio = formulaForPercentageChangeInVolumeToPercentPriceChangeRatio(prev, curr)
+            println(s"${curr.date} : $volumeToPriceChangeRatio")
+
+          case _ => ()
+        }
+      }
+    } yield ()
+  }
+
+  def formulaForPercentageChangeInVolumeToPercentPriceChangeRatio(prev: StockData, curr: StockData): Double = {
+    val volumeChange = curr.volume - prev.volume
+    val priceChange = curr.close.toDouble - prev.close.toDouble
+    val volumeChangePercentage = volumeChange / prev.volume
+    val priceChangePercentage = priceChange / prev.close.toDouble
+    volumeChangePercentage / priceChangePercentage
+  }
+
+
 
   def printStockAndBankNiftyLogReturns(): IO[Unit] = {
     for {
-      _ <- computeDailyLogReturnsForStock()
-      _ <- IO(println("Bank Nifty"))
-      _ <- computeDailyLogReturnsForBankNifty()
+//      _ <- computeDailyLogReturnsForStock()
+//      _ <- IO(println("Bank Nifty"))
+//      _ <- computeDailyLogReturnsForBankNifty()
+      _ <- IO(println("Volume to Price Change Ratio"))
+      resourceStream = getClass.getResourceAsStream("/data/nse/stocks/HDFC_temp.csv")
+      path <- IO {
+        val tempFile = Files.createTempFile("HDFC_temp", ".csv")
+        Files.copy(resourceStream, tempFile, java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+        tempFile
+      }
+      _ <- calculateVolumeToPriceChangeRatioForStock(path)
     } yield ()
   }
 
